@@ -1,0 +1,34 @@
+From a17733d3865584fda5b191f9061468d1c613271e Mon Sep 17 00:00:00 2001
+From: Fathi Boudra <fabo@freedesktop.org>
+Date: Fri, 24 Sep 2010 17:47:58 +0000
+Subject: xdg-email: Fix e-mail attachements support with Thunderbird3 (BR13435)
+
+---
+diff --git a/scripts/xdg-email b/scripts/xdg-email
+index b6ef2d1..0afc70e 100755
+--- a/scripts/xdg-email
++++ b/scripts/xdg-email
+@@ -398,7 +398,7 @@ run_thunderbird()
+     BCC=$(echo "$MAILTO" | grep '^bcc=' | sed 's/^bcc=//' | awk '{ printf "%s,",$0 }')
+     SUBJECT=$(echo "$MAILTO" | grep '^subject=' | tail -n 1)
+     BODY=$(echo "$MAILTO" | grep '^body=' | tail -n 1)
+-    ATTACH=$(echo "$MAILTO" | sed 's/^attach=/\n\nfile:\/\//g' | awk '/^file:/ { printf "%s,",$0 }')
++    ATTACH=$(echo "$MAILTO" | sed 's/^attach=/\n\nfile:\/\//g' | awk '/^file:/ { printf "%s,",$0 }' | sed 's/,$//')
+ 
+     if [ -z "$TO" ] ; then
+         NEWMAILTO=
+diff --git a/scripts/xdg-email.in b/scripts/xdg-email.in
+index ffc26ed..4dbc26c 100755
+--- a/scripts/xdg-email.in
++++ b/scripts/xdg-email.in
+@@ -48,7 +48,7 @@ run_thunderbird()
+     BCC=$(echo "$MAILTO" | grep '^bcc=' | sed 's/^bcc=//' | awk '{ printf "%s,",$0 }')
+     SUBJECT=$(echo "$MAILTO" | grep '^subject=' | tail -n 1)
+     BODY=$(echo "$MAILTO" | grep '^body=' | tail -n 1)
+-    ATTACH=$(echo "$MAILTO" | sed 's/^attach=/\n\nfile:\/\//g' | awk '/^file:/ { printf "%s,",$0 }')
++    ATTACH=$(echo "$MAILTO" | sed 's/^attach=/\n\nfile:\/\//g' | awk '/^file:/ { printf "%s,",$0 }' | sed 's/,$//')
+ 
+     if [ -z "$TO" ] ; then
+         NEWMAILTO=
+--
+cgit v0.8.3-6-g21f6

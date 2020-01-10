@@ -1,4 +1,4 @@
-diff -up xdg-utils-1.0.2/scripts/xdg-open.mimeopen xdg-utils-1.0.2/scripts/xdg-open
+diff -up xdg-utils-1.0.2/scripts/xdg-open.in.mimeopen xdg-utils-1.0.2/scripts/xdg-open.in
 --- xdg-utils-1.0.2/scripts/xdg-open.mimeopen	2007-06-24 14:58:01.000000000 -0500
 +++ xdg-utils-1.0.2/scripts/xdg-open	2008-01-18 08:49:50.000000000 -0600
 @@ -360,6 +360,13 @@ open_xfce()

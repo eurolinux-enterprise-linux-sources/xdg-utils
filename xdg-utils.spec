@@ -4,7 +4,7 @@
 Summary: Basic desktop integration functions
 Name:    xdg-utils
 Version: 1.0.2
-Release: 15.%{cvs}%{?dist}
+Release: 17.%{cvs}%{?dist}
 
 URL:     http://portland.freedesktop.org/
 %if 0%{?cvs:1}
@@ -18,7 +18,22 @@ Group:   System Environment/Base
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 
+# https://bugzilla.redhat.com/show_bug.cgi?id=598063
+Patch0: xdg-utils-wrong-gconftool.patch
+
 Patch1: xdg-utils-1.0.2-htmlview.patch
+
+# xdg-email cannot create attachments for thunderbird
+# https://bugzilla.redhat.com/show_bug.cgi?id=659782
+Patch2: xdg-utils-1.1.0-thunderbird-attachments.patch
+
+# xdg-email fails to supply To address for Thunderbird
+# https://bugzilla.redhat.com/show_bug.cgi?id=659786
+Patch3: xdg-utils-1.1.0-thunderbird-to-address.patch
+Patch4: xdg-utils-1.1.x-gawk-unicode.patch
+Patch5: xdg-utils-1.1.x-thunderbird-unescape.patch
+Patch6: xdg-utils-1.1.x-thunderbird-unescape-attachment.patch
+Patch7: xdg-utils-1.1.x-thunderbird-double-quotes.patch
 
 ## upstream patches
 Patch101: xdg-utils-1.0.2-mimeopen.patch
@@ -32,8 +47,6 @@ Requires: coreutils
 Requires: desktop-file-utils
 Requires: which
 
-#  https://bugzilla.redhat.com/show_bug.cgi?id=598063
-Patch0: xdg-utils-wrong-gconftool.patch
 
 %description
 The %{name} package is a set of simple scripts that provide basic
@@ -61,8 +74,13 @@ The following scripts are provided at this time:
 #setup -q -n %{name}-%{version}%{?beta}
 %setup -q -n %{name}
 %patch0 -p1 -b .wrong-gconftool
-
 %patch1 -p1 -b .htmlview
+%patch2 -p1 -b .thunderbird-attachments
+%patch3 -p1 -b .thunderbird-to-address
+%patch4 -p1 -b .gawk-unicode
+%patch5 -p1 -b .thunderbird-unescape
+%patch6 -p1 -b .thunderbird-unescape-attachment
+%patch7 -p1 -b .thunderbird-double-quotes
 
 %if ! 0%{?cvs:1}
 %patch101 -p1 -b .mimeopen
@@ -75,6 +93,8 @@ The following scripts are provided at this time:
 %configure
 
 make %{?_smp_mflags}
+# regenerate scripts
+for i in scripts/xdg-*.in; do rm -f ${i%.in}; done
 make -C scripts scripts
 
 
@@ -96,6 +116,13 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Aug 18 2011 Tomas Bzatek <tbzatek@redhat.com> - 1.0.2-17.20091016cvs
+- More tweaks for Thunderbird 5 (#659782,#659786)
+
+* Thu Jul 28 2011 Tomas Bzatek <tbzatek@redhat.com> - 1.0.2-16.20091016cvs
+- Fix e-mail attachements support with Thunderbird3 (#659782)
+- Fix xdg-email fails to supply To address for Thunderbird (#659786)
+
 * Mon Jun 14 2010 Matthias Clasen <mclasen@redhat.com> - 1.0.2-15.20091016cvs
 - Fix xdg-email to call the correct gconf utility
 Resolves: #598063

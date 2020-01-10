@@ -1,0 +1,35 @@
+From 66537d6ac9d44e14e91ccca77536345338af0e62 Mon Sep 17 00:00:00 2001
+From: Rex Dieter <rdieter@fedoraproject.org>
+Date: Fri, 12 Aug 2011 14:04:33 +0000
+Subject: * xdg-email fails with unicode strings if using gawk (BR13139)
+
+---
+diff --git a/scripts/xdg-email.in b/scripts/xdg-email.in
+index bbfb604..4120dda 100644
+--- a/scripts/xdg-email.in
++++ b/scripts/xdg-email.in
+@@ -207,7 +207,12 @@ open_generic()
+ 
+ url_encode()
+ {
+-result=$(echo "$1" | $utf8 | awk '
++str=$(echo "$1" | $utf8)
++local ORIG_LANG="$LANG"
++local ORIG_LC_ALL="$LC_ALL"
++LANG=C
++LC_ALL=C
++result=$(echo "$str" | awk '
+     BEGIN {
+         for ( i=1; i<=255; ++i ) ord [ sprintf ("%c", i) "" ] = i + 0
+         e = ""
+@@ -232,6 +237,8 @@ result=$(echo "$1" | $utf8 | awk '
+         print e
+     }
+ ')
++LANG="$ORIG_LANG"
++LC_ALL="$ORIG_LC_ALL"
+ }
+ 
+ options=
+--
+cgit v0.8.3-6-g21f6

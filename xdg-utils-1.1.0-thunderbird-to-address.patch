@@ -1,0 +1,34 @@
+From 845c4c67f8e3236016b59197c8d723d5f8fc0a4d Mon Sep 17 00:00:00 2001
+From: Fathi Boudra <fabo@freedesktop.org>
+Date: Sun, 28 Feb 2010 14:01:00 +0000
+Subject: xde-email: fix typo on TO field (BR13435).
+
+---
+diff --git a/scripts/xdg-email b/scripts/xdg-email
+index 91baaa2..1ad5b3b 100755
+--- a/scripts/xdg-email
++++ b/scripts/xdg-email
+@@ -391,7 +391,7 @@ run_thunderbird()
+     fi
+ 
+     MAILTO=$(echo "$MAILTO" | sed 's/&/\n/g')
+-    TOqul=$(echo "$MAILTO" | grep '^to=' | sed 's/^to=//' | awk '{ printf "%s,",$0 }')
++    TO=$(echo "$MAILTO" | grep '^to=' | sed 's/^to=//' | awk '{ printf "%s,",$0 }')
+     CC=$(echo "$MAILTO" | grep '^cc=' | sed 's/^cc=//' | awk '{ printf "%s,",$0 }')
+     BCC=$(echo "$MAILTO" | grep '^bcc=' | sed 's/^bcc=//' | awk '{ printf "%s,",$0 }')
+     SUBJECT=$(echo "$MAILTO" | grep '^subject=' | tail -n 1)
+diff --git a/scripts/xdg-email.in b/scripts/xdg-email.in
+index 37edc6c..73a0b8e 100755
+--- a/scripts/xdg-email.in
++++ b/scripts/xdg-email.in
+@@ -41,7 +41,7 @@ run_thunderbird()
+     fi
+ 
+     MAILTO=$(echo "$MAILTO" | sed 's/&/\n/g')
+-    TOqul=$(echo "$MAILTO" | grep '^to=' | sed 's/^to=//' | awk '{ printf "%s,",$0 }')
++    TO=$(echo "$MAILTO" | grep '^to=' | sed 's/^to=//' | awk '{ printf "%s,",$0 }')
+     CC=$(echo "$MAILTO" | grep '^cc=' | sed 's/^cc=//' | awk '{ printf "%s,",$0 }')
+     BCC=$(echo "$MAILTO" | grep '^bcc=' | sed 's/^bcc=//' | awk '{ printf "%s,",$0 }')
+     SUBJECT=$(echo "$MAILTO" | grep '^subject=' | tail -n 1)
+--
+cgit v0.8.3-6-g21f6

@@ -1,0 +1,25 @@
+From 241682726eb96342bd80e1b64351d6050bc1f22d Mon Sep 17 00:00:00 2001
+From: Tomas Bzatek <tbzatek@redhat.com>
+Date: Fri, 12 Aug 2011 13:33:48 +0000
+Subject: xdg-email: Pass unescaped addresses for Thunderbird 5
+
+---
+diff --git a/scripts/xdg-email.in b/scripts/xdg-email.in
+index 4120dda..f6990e5 100644
+--- a/scripts/xdg-email.in
++++ b/scripts/xdg-email.in
+@@ -43,9 +43,9 @@ run_thunderbird()
+     fi
+ 
+     MAILTO=$(echo "$MAILTO" | sed 's/&/\n/g')
+-    TO=$(echo "$MAILTO" | grep '^to=' | sed 's/^to=//' | awk '{ printf "%s,",$0 }')
+-    CC=$(echo "$MAILTO" | grep '^cc=' | sed 's/^cc=//' | awk '{ printf "%s,",$0 }')
+-    BCC=$(echo "$MAILTO" | grep '^bcc=' | sed 's/^bcc=//' | awk '{ printf "%s,",$0 }')
++    TO=$(echo -e $(echo "$MAILTO" | grep '^to=' | sed 's/^to=//;s/%\(..\)/\\x\1/g' | awk '{ printf "%s,",$0 }'))
++    CC=$(echo -e $(echo "$MAILTO" | grep '^cc=' | sed 's/^cc=//;s/%\(..\)/\\x\1/g' | awk '{ printf "%s,",$0 }'))
++    BCC=$(echo -e $(echo "$MAILTO" | grep '^bcc=' | sed 's/^bcc=//;s/%\(..\)/\\x\1/g' | awk '{ printf "%s,",$0 }'))
+     SUBJECT=$(echo "$MAILTO" | grep '^subject=' | tail -n 1)
+     BODY=$(echo "$MAILTO" | grep '^body=' | tail -n 1)
+     ATTACH=$(echo "$MAILTO" | sed 's/^attach=/\n\nfile:\/\//g' | awk '/^file:/ { printf "%s,",$0 }' | sed 's/,$//')
+--
+cgit v0.8.3-6-g21f6

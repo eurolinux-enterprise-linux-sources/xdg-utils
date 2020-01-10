@@ -1,0 +1,22 @@
+From 3860278a0a7af1a4d81c715c8983619966f7122e Mon Sep 17 00:00:00 2001
+From: Tomas Bzatek <tbzatek@redhat.com>
+Date: Fri, 12 Aug 2011 15:34:37 +0000
+Subject: xdg-email: Unescape the attachment string for Thunderbird 5 too
+
+Please see https://bugs.freedesktop.org/show_bug.cgi?id=40041
+---
+diff --git a/scripts/xdg-email.in b/scripts/xdg-email.in
+index f6990e5..3930f38 100644
+--- a/scripts/xdg-email.in
++++ b/scripts/xdg-email.in
+@@ -48,7 +48,7 @@ run_thunderbird()
+     BCC=$(echo -e $(echo "$MAILTO" | grep '^bcc=' | sed 's/^bcc=//;s/%\(..\)/\\x\1/g' | awk '{ printf "%s,",$0 }'))
+     SUBJECT=$(echo "$MAILTO" | grep '^subject=' | tail -n 1)
+     BODY=$(echo "$MAILTO" | grep '^body=' | tail -n 1)
+-    ATTACH=$(echo "$MAILTO" | sed 's/^attach=/\n\nfile:\/\//g' | awk '/^file:/ { printf "%s,",$0 }' | sed 's/,$//')
++    ATTACH=$(echo -e $(echo "$MAILTO" | grep '^attach=' | sed 's/^attach=//;s/%\(..\)/\\x\1/g' | awk '{ printf "%s,",$0 }' | sed 's/,$//'))
+ 
+     if [ -z "$TO" ] ; then
+         NEWMAILTO=
+--
+cgit v0.8.3-6-g21f6
