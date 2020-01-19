@@ -5,7 +5,7 @@
 Summary: Basic desktop integration functions 
 Name:    xdg-utils
 Version: 1.1.0
-Release: 0.15.%{snap}%{?dist}
+Release: 0.16.%{snap}%{?dist}
 
 URL:     http://portland.freedesktop.org/ 
 %if 0%{?snap:1}
@@ -97,6 +97,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.1.0-0.16.20120809git
+- Mass rebuild 2013-12-27
+
 * Fri Feb 15 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.0-0.15.20120809git
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
