@@ -5,7 +5,7 @@
 Summary: Basic desktop integration functions 
 Name:    xdg-utils
 Version: 1.1.0
-Release: 0.16.%{snap}%{?dist}
+Release: 0.17.%{snap}%{?dist}
 
 URL:     http://portland.freedesktop.org/ 
 %if 0%{?snap:1}
@@ -14,6 +14,9 @@ Source1: xdg-utils-git_checkout.sh
 %else
 Source0: http://portland.freedesktop.org/download/xdg-utils-%{version}%{?pre:-%{pre}}.tar.gz
 %endif
+
+Patch0: xdg-screensaver-lock.patch
+
 License: MIT 
 Group:   System Environment/Base
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,7 +56,7 @@ The following scripts are provided at this time:
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
-
+%patch0 -p1
 
 %build
 %configure
@@ -97,6 +100,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Mar 15 2016 Matthias Clasen <mclasen@redhat.com> - 1.1.0-0.17.20120809git
+- Fix screensaver locking in GNOME
+Resolves: #1083390
+
 * Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.1.0-0.16.20120809git
 - Mass rebuild 2013-12-27
 

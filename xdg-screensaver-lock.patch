@@ -1,0 +1,34 @@
+diff -up xdg-utils-1.1.0/scripts/xdg-screensaver.in.use-dbus xdg-utils-1.1.0/scripts/xdg-screensaver.in
+--- xdg-utils-1.1.0/scripts/xdg-screensaver.in.use-dbus	2016-03-15 16:47:46.194698630 -0400
++++ xdg-utils-1.1.0/scripts/xdg-screensaver.in	2016-03-15 16:48:45.221438504 -0400
+@@ -462,7 +462,12 @@ screensaver_gnome_screensaver()
+         ;;
+ 
+         lock)
+-        gnome-screensaver-command --lock > /dev/null 2> /dev/null
++        dbus-send --session \
++                  --dest=org.gnome.ScreenSaver \
++                  --type=method_call \
++                  /org/gnome/ScreenSaver \
++                  org.gnome.ScreenSaver.Lock \
++                  2> /dev/null
+         result=$?
+         ;;
+ 
+diff -up xdg-utils-1.1.0/scripts/xdg-screensaver.use-dbus xdg-utils-1.1.0/scripts/xdg-screensaver
+--- xdg-utils-1.1.0/scripts/xdg-screensaver.use-dbus	2016-03-15 16:48:56.480579481 -0400
++++ xdg-utils-1.1.0/scripts/xdg-screensaver	2016-03-15 16:49:18.607856400 -0400
+@@ -786,7 +786,12 @@ screensaver_gnome_screensaver()
+         ;;
+ 
+         lock)
+-        gnome-screensaver-command --lock > /dev/null 2> /dev/null
++        dbus-send --session \
++                  --dest=org.gnome.ScreenSaver \
++                  --type=method_call \
++                  /org/gnome/ScreenSaver \
++                  org.gnome.ScreenSaver.Lock \
++                  2> /dev/null
+         result=$?
+         ;;
+ 
